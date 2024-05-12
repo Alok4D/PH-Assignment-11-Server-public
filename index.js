@@ -52,42 +52,49 @@ async function run() {
   })
 
 
-  // 
-
-    
-
-  app.get("/food/email/:email", async (req, res) => {
+  // my added food items.......
+    app.get("/food/email/:email", async (req, res) => {
     const result = await foodCollection.find({ email: req.params.email }).toArray();
     res.send(result);
     
   })
-
-  // update
-  app.put('/food/:id',async(req,res)=>{
+  //delete btn.........
+  app.delete('/food/:id', async(req, res) => {
     const id = req.params.id;
-    const filter = {_id:new ObjectId(id)}
-    const options = {upsert: true};
-    const updateCraft =req.body;
-    const spots = {
-     
-      $set: {
-        itemName:updateCraft.itemName,
-        subcategory:updateCraft.subcategory,
-        photo:updateCraft.photo,
-        price:updateCraft.price,
-        rating:updateCraft.rating,
-        customizationExample:updateCraft.customizationExample,
-        processingTime:updateCraft.processingTime,
-        stockStatus:updateCraft.stockStatus,
-        description:updateCraft.description,
-      }
-    }
-    const result = await foodCollection.updateOne(filter,spots);
-    res.send(result)
+    const query = {_id: new ObjectId(id)}
+    const result = await foodCollection.deleteOne(query);
+    res.send(result);
   })
 
-  // 
+  // update
+  app.get('/food/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = {_id: new ObjectId(id)}
+    const result = await foodCollection.findOne(query);
+    res.send(result);
 
+  })
+  app.put('/food/:id', async(req, res) => {
+    const id = req.params.id;
+    const filter = {_id: new ObjectId(id)}
+    const options = { upsert: true};
+    const updatedFood = req.body;
+    const food = {
+      $set: {
+              name: updatedFood.name,
+              subcategory:updatedFood.subcategory,
+              photo:updatedFood.photo,
+              price:updatedFood.price,
+              rating:updatedFood.rating,
+              foodOrigin:updatedFood.foodOrigin,
+              quantity:updatedFood.quantity,
+              itemName:updatedFood.itemName,
+              description:updatedFood.description,
+      }
+    }
+    const result = await foodCollection.updateOne(filter, food, options);
+    res.send(result)
+   })
 
 
 
