@@ -51,14 +51,45 @@ async function run() {
       res.send(result);
   })
 
-  // 
-    app.get('/food/:id', async (req, res) => {
-      const food_id = req.params.id;
-      const query = { _id: new ObjectId(food_id) }
-      const result = await foodCollection.findOne(query);
 
-      res.send(result);
+  // 
+
+    
+
+  app.get("/food/email/:email", async (req, res) => {
+    const result = await foodCollection.find({ email: req.params.email }).toArray();
+    res.send(result);
+    
   })
+
+  // update
+  app.put('/food/:id',async(req,res)=>{
+    const id = req.params.id;
+    const filter = {_id:new ObjectId(id)}
+    const options = {upsert: true};
+    const updateCraft =req.body;
+    const spots = {
+     
+      $set: {
+        itemName:updateCraft.itemName,
+        subcategory:updateCraft.subcategory,
+        photo:updateCraft.photo,
+        price:updateCraft.price,
+        rating:updateCraft.rating,
+        customizationExample:updateCraft.customizationExample,
+        processingTime:updateCraft.processingTime,
+        stockStatus:updateCraft.stockStatus,
+        description:updateCraft.description,
+      }
+    }
+    const result = await foodCollection.updateOne(filter,spots);
+    res.send(result)
+  })
+
+  // 
+
+
+
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
