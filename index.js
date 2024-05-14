@@ -47,7 +47,6 @@ async function run() {
       const food_id = req.params.id;
       const query = { _id: new ObjectId(food_id) }
       const result = await foodCollection.findOne(query);
-
       res.send(result);
   })
 
