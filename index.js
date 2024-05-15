@@ -49,17 +49,20 @@ async function run() {
       const result = await foodCollection.findOne(query);
       res.send(result);
   })
-  //
-  // app.get('/-route/', async (req, res)=>{
-  //   let filter = {};
-  //   if (req.query.search) {
-  //   filter.r_filter_field = { $regex: req.query.search, $options: "i" };
-  //   }
-    
-  //   const result = await foodCollection.find(filter).toArray();
-    
-  //   res.send(result);
-  //   })
+
+  //search foods......
+ 
+  app.get('/foods', async (req, res)=>{
+  let filter = {};
+  if (req.query.search) {
+  filter.foodName = { $regex: req.query.search, $options: "i" };
+  }
+  
+  const result = await foodCollection.find(filter).toArray();
+  
+  res.send(result);
+  })
+ 
   //
 
 
